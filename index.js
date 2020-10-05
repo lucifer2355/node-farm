@@ -14,6 +14,8 @@ const replaceTemplate = (temp, product) => {
 
   if (!product.organic)
     output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
+
+  return output;
 };
 
 const tempOverview = fs.readFileSync(
@@ -39,8 +41,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-type": "text/html" });
 
     const cardsHtml = dataObj.map((el) => replaceTemplate(tempCard, el));
+    const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
 
-    res.end(tempOverview);
+    res.end(output);
   }
   //! Product page
   else if (pathName === "/product") {
